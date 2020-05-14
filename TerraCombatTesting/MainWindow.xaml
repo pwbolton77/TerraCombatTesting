@@ -45,17 +45,17 @@
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
             <Label   Grid.Row="0" Grid.Column="0" Margin="5" Content="Offense Rating"/>
-            <TextBox Grid.Row="0" Grid.Column="1" Margin="10, 0" Width="200" Text="{Binding OffenseRating, Mode=TwoWay}"></TextBox>
+            <TextBox Grid.Row="0" Grid.Column="1" x:Name="OffenseRatingTextBox" Margin="10, 0" Width="200" Text="{Binding OffenseRating, Mode=TwoWay}"></TextBox>
 
             <Label   Grid.Row="0" Grid.Column="3" Margin="5" Content="Defense Rating"/>
-            <TextBox Grid.Row="0" Grid.Column="4" Margin="10, 0" Width="200" Text="{Binding DefenseRating, Mode=TwoWay}"></TextBox>
+            <TextBox Grid.Row="0" Grid.Column="4" x:Name="DefenseRatingTextBox" Margin="10, 0" Width="200" Text="{Binding DefenseRating, Mode=TwoWay}"></TextBox>
 
             <Label   Grid.Row="1" Grid.Column="0" Margin="5" Content="Num Trials"/>
-            <TextBox Grid.Row="1" Grid.Column="1"  Margin="10, 0" Width="200" Text="{Binding NumTrials, Mode=TwoWay}"></TextBox>
+            <TextBox Grid.Row="1" Grid.Column="1" x:Name="TrialNumTextBox" Margin="10, 0" Width="200" Text="{Binding NumTrials, Mode=TwoWay}"></TextBox>
         </Grid>
 
 
-        <Button Content="Run Trials" Width="200" Margin="10" HorizontalAlignment="Left" Click="ButonRunTrials"></Button>
+        <Button x:Name="RunTrialsButton" Content="Run Trials" Width="200" Margin="10" HorizontalAlignment="Left" Click="RunTrialsButonClicked"></Button>
 
     </StackPanel>
 </Window>
