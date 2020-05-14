@@ -37,15 +37,26 @@ namespace TerraCombatTesting
 
         public MainViewModel MainViewModel { get; set; }
 
-        private void ButonRunTrials(object sender, RoutedEventArgs e)
+        private async void ButonRunTrials(object sender, RoutedEventArgs e)
         {
-            string or = MainViewModel.OffenseRating.ToString();
-            string dr = MainViewModel.DefenseRating.ToString();
-            string num_trials = MainViewModel.NumTrials.ToString();
+            // Async WPF at: https://stackoverflow.com/questions/27089263/how-to-run-and-interact-with-an-async-task-from-a-wpf-gui/27089652
+            MessageBox.Show("Running ...");
 
-            string msg = $"OR= {or}  DR={dr}  trials={num_trials}";
+            //queue a task to run on threadpool
+            Task task = Task.Run(() => ExecuteLongProcedure(this, MainViewModel.OffenseRating, MainViewModel.DefenseRating, MainViewModel.NumTrials) );
 
-            MessageBox.Show(msg);
+            // ExecuteLongProcedure is now running asynchronously
+
+            //wait for it to end without blocking the main thread
+            await task;
+
+            MessageBox.Show("Done!");
+        }
+
+        void ExecuteLongProcedure(MainWindow gui, int param1, int param2, int param3)
+        {
+            System.Threading.Thread.Sleep(3000);
         }
     }
+
 }

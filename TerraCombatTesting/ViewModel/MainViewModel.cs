@@ -8,7 +8,6 @@ namespace TerraCombatTesting.ViewModel
 {
     public class MainViewModel : Observable
     {
-
         private int _offenseRating;
 
         public int OffenseRating
