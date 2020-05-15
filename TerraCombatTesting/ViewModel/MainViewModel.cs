@@ -50,5 +50,19 @@ namespace TerraCombatTesting.ViewModel
                 }
             }
         }
+
+        private string _resultsLog;
+        public string ResultsLog 
+        {
+            get { return _resultsLog; }
+            set
+            {
+                if (value != _resultsLog)
+                {
+                    _resultsLog = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
     }
 }

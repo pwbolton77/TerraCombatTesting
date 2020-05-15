@@ -26,6 +26,7 @@ namespace TerraCombatTesting
         public MainWindow()
         {
             MainViewModel = new MainViewModel();
+            MainViewModel.ResultsLog = "Hello!";
             InitializeComponent();
             DataContext = MainViewModel;
         }
@@ -61,16 +62,18 @@ namespace TerraCombatTesting
             //wait for it to end without blocking the main thread
             var result = await task;
 
-            string msg = $"Hits: {result.Hits}";
-            MessageBox.Show(msg);
+            MainViewModel.ResultsLog = 
+                $"Hits: {result.Hits}  Critical Hits: {result.CriticalHits}  OR: {result.OffenseRating}  DR: {result.DefenseRating}  Num Trials: {result.NumTrials}\n" 
+                + MainViewModel.ResultsLog;
+            // MessageBox.Show(msg);
 
             EnableTrialEntryInput(true /* enable */);
         }
 
-        TrialBatchResult ExecuteLongProcedure(MainWindow gui, int param1, int param2, int param3)
+        TrialBatchResult ExecuteLongProcedure(MainWindow gui, int offenseRating, int defenseRating, int numTrials)
         {
-            System.Threading.Thread.Sleep(3000);
-            return new TrialBatchResult(param1, param2, param3, 100, 5);
+            System.Threading.Thread.Sleep(500);
+            return new TrialBatchResult(offenseRating, defenseRating, numTrials, 100, 5);
         }
     }
 
