@@ -57,5 +57,7 @@
 
         <Button x:Name="RunTrialsButton" Content="Run Trials" Width="200" Margin="10" HorizontalAlignment="Left" Click="RunTrialsButonClicked"></Button>
 
+        <!--Results-->
+
     </StackPanel>
 </Window>
