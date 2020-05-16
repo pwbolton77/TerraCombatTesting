@@ -8,7 +8,7 @@ namespace TerraCombatTesting.ViewModel
 {
     public class MainViewModel : Observable
     {
-        private int _offenseRating;
+        private int _offenseRating = 50;
 
         public int OffenseRating
         {
@@ -23,7 +23,7 @@ namespace TerraCombatTesting.ViewModel
             }
         }
 
-        private int _defenseRating;
+        private int _defenseRating = 50;
         public int DefenseRating
         {
             get { return _defenseRating; }
@@ -37,7 +37,7 @@ namespace TerraCombatTesting.ViewModel
             }
         }
 
-        private int _numTrials;
+        private int _numTrials = 10000000;
         public int NumTrials
         {
             get { return _numTrials; }

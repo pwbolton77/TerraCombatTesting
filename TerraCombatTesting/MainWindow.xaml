@@ -55,12 +55,12 @@
         </Grid>
 
 
-        <Button x:Name="RunTrialsButton" Content="Run Trials" Width="200" Margin="10" HorizontalAlignment="Left" Click="RunTrialsButonClicked"></Button>
+        <Button x:Name="RunTrialsButton" Content="Run Trials" Width="200" Margin="10" HorizontalAlignment="Left" Click="RunTrialsButtonClicked"></Button>
 
         <!--Results-->
-        <ScrollViewer>
-            <TextBlock Height="400" Background="White" x:Name="ResultsLogTextBlock" Margin="5" Text="{Binding ResultsLog, Mode=OneWay}" 
-                       ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Auto" />
+        <ScrollViewer Height="400">
+            <TextBlock Background="White" x:Name="ResultsLogTextBlock" Margin="5" Text="{Binding ResultsLog, Mode=TwoWay}" 
+                       ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" />
         </ScrollViewer>
     </StackPanel>
 </Window>
