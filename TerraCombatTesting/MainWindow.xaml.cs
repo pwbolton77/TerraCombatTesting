@@ -15,6 +15,7 @@ using System.Windows.Shapes;
 using System.ComponentModel;
 using TerraCombatTesting.ViewModel;
 using TerraCombatTesting.Logic;
+using System.Diagnostics;
 
 namespace TerraCombatTesting
 {
@@ -23,7 +24,7 @@ namespace TerraCombatTesting
     /// </summary>
     public partial class MainWindow : Window
     {
-        private RandomNumberGenerator _rng = new RandomNumberGenerator( 1 /* starting seed */);
+        private RandomNumberGenerator _rng = new RandomNumberGenerator(1 /* starting seed */);
 
         public MainWindow()
         {
@@ -51,6 +52,7 @@ namespace TerraCombatTesting
 
         private async void RunTrialsButtonClicked(object sender, RoutedEventArgs e)
         {
+            PrintQuantiles(); //Josh's Function to value check hit rating function -JB 5/25/20
             // Async WPF at: https://stackoverflow.com/questions/27089263/how-to-run-and-interact-with-an-async-task-from-a-wpf-gui/27089652
             EnableTrialEntryInput(false /* disable */);
 
@@ -73,16 +75,15 @@ namespace TerraCombatTesting
                 criticalHitPercent = (100.0 * result.CriticalHits) / result.NumTrials;
             }
 
-            MainViewModel.ResultsLog = 
-                $"Hits: {result.Hits} ({hitPercent :F2}%)" + 
-                $"  Critical Hits: {result.CriticalHits} ({criticalHitPercent :F2}%)" + 
-                $"  OR: {result.OffenseRating}  DR: {result.DefenseRating}  Num Trials: {result.NumTrials}\n" 
+            MainViewModel.ResultsLog =
+                $"Hits: {result.Hits} ({hitPercent:F2}%)" +
+                $"  Critical Hits: {result.CriticalHits} ({criticalHitPercent:F2}%)" +
+                $"  OR: {result.OffenseRating}  DR: {result.DefenseRating}  Num Trials: {result.NumTrials} Combat Residual: {Math.Abs(result.OffenseRating - result.DefenseRating)}\n"
                 + MainViewModel.ResultsLog;
             // MessageBox.Show(msg);
 
             EnableTrialEntryInput(true /* enable */);
         }
-
 
 
         TrialBatchResult ExecuteTrialBatch(MainWindow gui, int offenseRating, int defenseRating, int numTrials)
@@ -106,22 +107,62 @@ namespace TerraCombatTesting
 
         private bool HitRoll(int offenseRating, int defenseRating, out bool criticalHit)
         {
-            // TODO: JOSH - Rewrite this function as you see fit.
-            int deltaRating = offenseRating - defenseRating;
 
-            int roll = _rng.RollDice(100);
+            double critChance = 5; // (in %%%%)
+            int ratingResidual = offenseRating - defenseRating; // The difference between Attack and Defense (Positive = attackeradv| Negative = defadv)
+            /* Rolling to determine Hit Chance */
+            double hit_chance = HitProbFunc(ratingResidual);
+            // PrintQuantiles();
 
-            bool hit_result = false;
-            if (roll > 50 - deltaRating)
-                hit_result = true;
+            criticalHit = false; // reset criticalHit indicator
+            bool hit_result; // reseet hit_result indicator
 
-            if (roll > 95)
-                criticalHit = true;
-            else
-                criticalHit = false;
+            int roll = _rng.RollDice(100); //the player's 'roll to hit'
+            roll = 96; // @@@ Temp
+
+            if (roll <= hit_chance) hit_result = true; // successful hit from attacker
+            else hit_result = false;
+
+            if (roll > 100 - critChance) criticalHit = true; // Checks to see if the roll was a crit (greater than the crit cutoff set by crit rating)
 
             return hit_result;
         }
-    }
 
+
+        private double HitProbFunc(double x)
+        {
+            // My graph this is based off of https://www.desmos.com/calculator/gtm3i8vcbf -JB
+
+            /*  FUNCTION COEFFICIENTS */
+            double max = 50.00; //this is max percent chance of winning, when OC=AC, (always 50% if OC=AC)
+            double slope = 0.08; //Changes the effect of the diminishing returns within the graph
+            double midp = 42.5; //Changes the midpoint of the graph
+
+            double a_coef = 0.5; // Domain control (X)
+            double b_coef = 2; // Range control (Y)
+            double c_coef = 42.5; // Intercept Control
+            // x = armor residual (In this case)
+
+            double pwr = -1 * slope * ((a_coef * x + c_coef) - midp); // seperating defining the power term of the exp function
+            double hit_prob = b_coef * (max * (1 / (1 + Math.Exp(pwr))));
+            if (hit_prob < 5.0) hit_prob = 5.0;
+            if (hit_prob > 95.0) hit_prob = 95.0;// enables cut off values of 95% and 5% as well as normalizes to PDF standards
+            return (hit_prob); // Attacker stronger
+
+
+        }
+
+        // Used to just show upper and lower quantiles of the hitProbFunction
+        private void PrintQuantiles()
+        {
+            Debug.WriteLine("Armor Residual Distribution Quartiles");
+            for (int i = 0; i <= 10; i++)
+            {
+                Debug.WriteLine("------------x-------------");
+                Debug.WriteLine("adv Residual: " + i * 10 + ": " + HitProbFunc(i * 10));
+                Debug.WriteLine("dis Residual: " + i * 10 + ": " + HitProbFunc(i * 10));
+            }
+        }
+    }
 }
+
