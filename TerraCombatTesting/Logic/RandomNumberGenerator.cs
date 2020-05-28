@@ -27,6 +27,21 @@ namespace TerraCombatTesting.Logic
             }
             return result;
         }
+
+
+        /// <summary>
+        /// Returns a random floating-point number that is greater than or equal to 0.0, and less than 1.0.
+        /// </summary>
+        /// <returns>Returns a random floating-point number that is greater than or equal to 0.0, and less than 1.0.</returns>
+        public double RollDouble()
+        {
+            double result = 0.0;
+            lock (_randLock)
+            {
+                result = _rnd.NextDouble();
+            }
+            return result;
+        }
     }
 }
 
