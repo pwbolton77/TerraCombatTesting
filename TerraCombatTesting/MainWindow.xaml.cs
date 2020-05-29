@@ -48,6 +48,7 @@ namespace TerraCombatTesting
             DefenseRatingTextBox.IsEnabled = is_enabled;
             TrialNumTextBox.IsEnabled = is_enabled;
             RunTrialsButton.IsEnabled = is_enabled;
+            ClearResultsButton.IsEnabled = is_enabled;
         }
 
         private async void RunTrialsButtonClicked(object sender, RoutedEventArgs e)
@@ -162,6 +163,11 @@ namespace TerraCombatTesting
                 Debug.WriteLine("adv Residual: " + i * 10 + ": " + HitProbFunc(i * 10));
                 Debug.WriteLine("dis Residual: " + i * 10 + ": " + HitProbFunc(i * 10));
             }
+        }
+
+        private void ClearResultsButtonClicked(object sender, RoutedEventArgs e)
+        {
+            MainViewModel.ResultsLog = "";
         }
     }
 }

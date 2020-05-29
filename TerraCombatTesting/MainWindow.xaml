@@ -55,7 +55,10 @@
         </Grid>
 
 
-        <Button x:Name="RunTrialsButton" Content="Run Trials" Width="200" Margin="10" HorizontalAlignment="Left" Click="RunTrialsButtonClicked"></Button>
+        <StackPanel Orientation="Horizontal">
+            <Button x:Name="RunTrialsButton" Content="Run Trials" Width="200" Margin="10" HorizontalAlignment="Left" Click="RunTrialsButtonClicked"></Button>
+            <Button x:Name="ClearResultsButton" Content="Clear Results" Width="200" Margin="10" HorizontalAlignment="Left" Click="ClearResultsButtonClicked"></Button>
+        </StackPanel>
 
         <!--Results-->
         <ScrollViewer Height="400">
