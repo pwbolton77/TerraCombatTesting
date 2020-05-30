@@ -119,15 +119,13 @@ namespace TerraCombatTesting
             bool hit_result; // reseet hit_result indicator
 
             int roll = _rng.RollDice(100); //the player's 'roll to hit'
-            if (roll <= hit_chance)
-            {
-                hit_result = true; // successful hit from attacker
-                if (roll <= critChance) criticalHit = true; // Checks to see if the roll was a crit simply if the roll is within the proportion (crit%/100) of the roll
-            }
-            else
-            {
-                hit_result = false;
-            }
+            roll = 96; // @@@ Temp
+
+            if (roll <= hit_chance) hit_result = true; // successful hit from attacker
+            else hit_result = false;
+
+            if (roll > 100 - critChance) criticalHit = true; // Checks to see if the roll was a crit (greater than the crit cutoff set by crit rating)
+
             return hit_result;
         }
 
@@ -150,14 +148,15 @@ namespace TerraCombatTesting
             double hit_prob = b_coef * (max * (1 / (1 + Math.Exp(pwr))));
             if (hit_prob < 5.0) hit_prob = 5.0;
             if (hit_prob > 95.0) hit_prob = 95.0;// enables cut off values of 95% and 5% as well as normalizes to PDF standards
-
             return (hit_prob); // Attacker stronger
+
+
         }
 
         // Used to just show upper and lower quantiles of the hitProbFunction
         private void PrintQuantiles()
         {
-            Debug.WriteLine("Armor Residual Distribution Quantiles");
+            Debug.WriteLine("Armor Residual Distribution Quartiles");
             for (int i = 0; i <= 10; i++)
             {
                 Debug.WriteLine("------------x-------------");

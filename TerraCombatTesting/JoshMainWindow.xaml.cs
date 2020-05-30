@@ -24,7 +24,7 @@ namespace TerraCombatTesting
     /// </summary>
     public partial class MainWindow : Window
     {
-        private RandomNumberGenerator _rng = new RandomNumberGenerator(1 /* starting seed */);
+        private RandomNumberGenerator _rng = new RandomNumberGenerator( 1 /* starting seed */);
 
         public MainWindow()
         {
@@ -48,7 +48,6 @@ namespace TerraCombatTesting
             DefenseRatingTextBox.IsEnabled = is_enabled;
             TrialNumTextBox.IsEnabled = is_enabled;
             RunTrialsButton.IsEnabled = is_enabled;
-            ClearResultsButton.IsEnabled = is_enabled;
         }
 
         private async void RunTrialsButtonClicked(object sender, RoutedEventArgs e)
@@ -76,9 +75,9 @@ namespace TerraCombatTesting
                 criticalHitPercent = (100.0 * result.CriticalHits) / result.NumTrials;
             }
 
-            MainViewModel.ResultsLog =
-                $"Hits: {result.Hits} ({hitPercent:F2}%)" +
-                $"  Critical Hits: {result.CriticalHits} ({criticalHitPercent:F2}%)" +
+            MainViewModel.ResultsLog = 
+                $"Hits: {result.Hits} ({hitPercent :F2}%)" + 
+                $"  Critical Hits: {result.CriticalHits} ({criticalHitPercent :F2}%)" + 
                 $"  OR: {result.OffenseRating}  DR: {result.DefenseRating}  Num Trials: {result.NumTrials} Combat Residual: {Math.Abs(result.OffenseRating - result.DefenseRating)}\n"
                 + MainViewModel.ResultsLog;
             // MessageBox.Show(msg);
@@ -114,7 +113,7 @@ namespace TerraCombatTesting
             /* Rolling to determine Hit Chance */
             double hit_chance = HitProbFunc(ratingResidual);
             // PrintQuantiles();
-
+ 
             criticalHit = false; // reset criticalHit indicator
             bool hit_result; // reseet hit_result indicator
 
@@ -127,8 +126,9 @@ namespace TerraCombatTesting
             else
             {
                 hit_result = false;
-            }
+            }         
             return hit_result;
+            
         }
 
 
@@ -146,12 +146,13 @@ namespace TerraCombatTesting
             double c_coef = 42.5; // Intercept Control
             // x = armor residual (In this case)
 
-            double pwr = -1 * slope * ((a_coef * x + c_coef) - midp); // seperating defining the power term of the exp function
-            double hit_prob = b_coef * (max * (1 / (1 + Math.Exp(pwr))));
+            double pwr = -1 * slope * ((a_coef*x+c_coef) - midp); // seperating defining the power term of the exp function
+            double hit_prob = b_coef*(max * (1/(1+Math.Exp(pwr))));
             if (hit_prob < 5.0) hit_prob = 5.0;
             if (hit_prob > 95.0) hit_prob = 95.0;// enables cut off values of 95% and 5% as well as normalizes to PDF standards
+                return (hit_prob); // Attacker stronger
 
-            return (hit_prob); // Attacker stronger
+
         }
 
         // Used to just show upper and lower quantiles of the hitProbFunction
@@ -164,11 +165,6 @@ namespace TerraCombatTesting
                 Debug.WriteLine("adv Residual: " + i * 10 + ": " + HitProbFunc(i * 10));
                 Debug.WriteLine("dis Residual: " + i * 10 + ": " + HitProbFunc(i * 10));
             }
-        }
-
-        private void ClearResultsButtonClicked(object sender, RoutedEventArgs e)
-        {
-            MainViewModel.ResultsLog = "";
         }
     }
 }
