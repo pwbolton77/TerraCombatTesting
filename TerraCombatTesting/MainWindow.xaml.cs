@@ -16,6 +16,7 @@ using System.ComponentModel;
 using TerraCombatTesting.ViewModel;
 using TerraCombatTesting.Logic;
 using System.Diagnostics;
+using System.Text.RegularExpressions;
 
 namespace TerraCombatTesting
 {
@@ -24,11 +25,13 @@ namespace TerraCombatTesting
     /// </summary>
     public partial class MainWindow : Window
     {
-        private RandomNumberGenerator _rng = new RandomNumberGenerator(1 /* starting seed */);
+        private RandomNumberDiceGenerator _rng = new RandomNumberDiceGenerator(1 /* starting seed */);
+        private DiceEvaluator _dice_evaluator;
 
         public MainWindow()
         {
             MainViewModel = new MainViewModel();
+            _dice_evaluator = new DiceEvaluator(_rng);
 
             InitializeComponent();
             DataContext = MainViewModel;
@@ -169,6 +172,20 @@ namespace TerraCombatTesting
         private void ClearResultsButtonClicked(object sender, RoutedEventArgs e)
         {
             MainViewModel.ResultsLog = "";
+        }
+
+        private void DamageExpressionTextBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            // Do evaluation when Enter key is pressed
+            if (e.Key == Key.Return)
+            {
+                bool eval_okay = _dice_evaluator.Evaluate(MainViewModel.DamageExpression, out int value);
+
+                if (eval_okay)
+                    MainViewModel.ResultsLog = MainViewModel.DamageExpression + " |  value: " +  value.ToString() + "\n" + MainViewModel.ResultsLog;
+                else
+                    MainViewModel.ResultsLog = MainViewModel.DamageExpression + " |  ERROR!" + "\n" + MainViewModel.ResultsLog;
+            }
         }
     }
 }

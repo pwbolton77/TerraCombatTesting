@@ -65,5 +65,14 @@
             <TextBlock Background="White" x:Name="ResultsLogTextBlock" Margin="5" Text="{Binding ResultsLog, Mode=TwoWay}" 
                        ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" />
         </ScrollViewer>
+
+
+        <StackPanel Orientation="Horizontal">
+            <Label   Grid.Row="0" Grid.Column="3" Margin="5" Content="Damage Expression (e.g. 2d8+5)"/>
+            <TextBox x:Name="DamageExpressionTextBox" Margin="10, 0" Width="200" Text="{Binding DamageExpression, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                     KeyDown="DamageExpressionTextBox_KeyDown">
+            </TextBox>
+        </StackPanel>
+
     </StackPanel>
 </Window>

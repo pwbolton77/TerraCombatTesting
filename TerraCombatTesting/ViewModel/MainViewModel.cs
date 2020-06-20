@@ -51,6 +51,21 @@ namespace TerraCombatTesting.ViewModel
             }
         }
 
+        private string _damageExpression;
+
+        public string DamageExpression
+        {
+            get { return _damageExpression; }
+            set 
+            { 
+                if (value != _damageExpression)
+                {
+                    _damageExpression = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
         private string _resultsLog;
         public string ResultsLog 
         {

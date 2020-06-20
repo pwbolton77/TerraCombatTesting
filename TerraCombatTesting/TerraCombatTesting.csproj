@@ -55,7 +55,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Logic\RandomNumberGenerator.cs" />
+    <Compile Include="Logic\DiceEvaluator.cs" />
+    <Compile Include="Logic\InfixToPostFix.cs" />
+    <Compile Include="Logic\RandomNumberDiceGenerator.cs" />
     <Compile Include="Logic\TrialBatchInput.cs" />
     <Compile Include="Logic\TrialBatchResult.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />

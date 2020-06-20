@@ -6,14 +6,27 @@ using System.Threading.Tasks;
 
 namespace TerraCombatTesting.Logic
 {
-    class RandomNumberGenerator
+    class RandomNumberDiceGenerator
     {
-
         private Random _rnd;
         static Object _randLock;
-        public RandomNumberGenerator(int seed)
+
+        /// <summary>
+        /// Constructor that takes a seed (i.e. seed determines the "random" but repeated sequence)
+        /// </summary>
+        /// <param name="seed"></param>
+        public RandomNumberDiceGenerator(int seed)
         {
             _rnd = new Random(seed);
+            _randLock = new Object();
+        }
+
+        /// <summary>
+        /// Constructor that seeds "randomly" (i.e. from the system clock)
+        /// </summary>
+        public RandomNumberDiceGenerator()
+        {
+            _rnd = new Random();
             _randLock = new Object();
         }
 
@@ -27,7 +40,6 @@ namespace TerraCombatTesting.Logic
             }
             return result;
         }
-
 
         /// <summary>
         /// Returns a random floating-point number that is greater than or equal to 0.0, and less than 1.0.
